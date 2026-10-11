@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0c0b10">
   <title>Crear cuenta | FogoSM</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +24,9 @@
       --border: #302b38;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -132,7 +135,9 @@
       margin: 0 0 26px;
     }
 
-    .field { margin-bottom: 17px; }
+    .field {
+      margin-bottom: 17px;
+    }
 
     label {
       display: block;
@@ -160,13 +165,21 @@
       box-shadow: 0 0 0 3px #ff762e20;
     }
 
-    input::placeholder { color: #797383; }
+    input::placeholder {
+      color: #797383;
+    }
 
-    input[type="date"] { color-scheme: dark; }
+    input[type="date"] {
+      color-scheme: dark;
+    }
 
-    .password-wrap { position: relative; }
+    .password-wrap {
+      position: relative;
+    }
 
-    .password-wrap input { padding-right: 78px; }
+    .password-wrap input {
+      padding-right: 78px;
+    }
 
     .show-password {
       position: absolute;
@@ -254,7 +267,9 @@
       font-weight: 900;
     }
 
-    a:hover { text-decoration: underline; }
+    a:hover {
+      text-decoration: underline;
+    }
 
     .legal {
       margin-top: 20px;
@@ -264,8 +279,26 @@
       color: #85808e;
     }
 
+    .beta-notice {
+      position: fixed;
+      bottom: 12px;
+      right: 12px;
+      z-index: 9999;
+      padding: 8px 13px;
+      border: 1px solid #ffffff26;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .5px;
+      box-shadow: 0 4px 18px #ee097940;
+    }
+
     @media (max-width: 760px) {
-      body { padding: 14px; }
+      body {
+        padding: 14px;
+      }
 
       .layout {
         max-width: 480px;
@@ -285,13 +318,19 @@
         margin-bottom: 10px;
       }
 
-      .hero-note { display: none; }
+      .hero-note {
+        display: none;
+      }
 
-      .form-panel { padding: 27px 23px 30px; }
+      .form-panel {
+        padding: 27px 23px 30px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
+      *,
+      *::before,
+      *::after {
         transition: none !important;
       }
     }
@@ -375,11 +414,18 @@
               autocomplete="new-password"
               required
             >
-            <button class="show-password" type="button" data-target="password">
+            <button
+              class="show-password"
+              type="button"
+              data-target="password"
+              aria-label="Mostrar u ocultar contraseña"
+            >
               Mostrar
             </button>
           </div>
-          <p class="hint">Debe tener al menos 3 caracteres, un número y una letra minúscula.</p>
+          <p class="hint">
+            Debe tener al menos 3 caracteres, un número y una letra minúscula.
+          </p>
         </div>
 
         <div class="field">
@@ -393,7 +439,12 @@
               autocomplete="new-password"
               required
             >
-            <button class="show-password" type="button" data-target="confirmPassword">
+            <button
+              class="show-password"
+              type="button"
+              data-target="confirmPassword"
+              aria-label="Mostrar u ocultar confirmación de contraseña"
+            >
               Mostrar
             </button>
           </div>
@@ -416,6 +467,7 @@
     </section>
   </main>
 
+  <!-- Supabase debe cargarse antes del código de registro -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase.js"></script>
 
@@ -425,18 +477,24 @@
     const submitButton = document.getElementById("submitButton");
     const birthdateInput = document.getElementById("birthdate");
 
-    // Prevent selecting a future date.
-    const today = new Date();
-    birthdateInput.max = [
-      today.getFullYear(),
-      String(today.getMonth() + 1).padStart(2, "0"),
-      String(today.getDate()).padStart(2, "0")
-    ].join("-");
+    // Impide seleccionar una fecha futura.
+    function getTodayString() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, "0");
+      const day = String(today.getDate()).padStart(2, "0");
 
+      return `${year}-${month}-${day}`;
+    }
+
+    birthdateInput.max = getTodayString();
+
+    // Botones para mostrar u ocultar las contraseñas.
     document.querySelectorAll(".show-password").forEach(button => {
       button.addEventListener("click", () => {
         const input = document.getElementById(button.dataset.target);
         const show = input.type === "password";
+
         input.type = show ? "text" : "password";
         button.textContent = show ? "Ocultar" : "Mostrar";
       });
@@ -452,12 +510,18 @@
       const now = new Date();
 
       let age = now.getFullYear() - birth.getFullYear();
+
       const beforeBirthday =
         now.getMonth() < birth.getMonth() ||
-        (now.getMonth() === birth.getMonth() &&
-         now.getDate() < birth.getDate());
+        (
+          now.getMonth() === birth.getMonth() &&
+          now.getDate() < birth.getDate()
+        );
 
-      if (beforeBirthday) age--;
+      if (beforeBirthday) {
+        age--;
+      }
+
       return age;
     }
 
@@ -469,7 +533,8 @@
       const email = document.getElementById("email").value.trim();
       const birthdate = birthdateInput.value;
       const password = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirmPassword").value;
+      const confirmPassword =
+        document.getElementById("confirmPassword").value;
 
       if (!/^[a-zA-Z0-9_.-]{3,20}$/.test(username)) {
         showMessage(
@@ -479,17 +544,24 @@
         return;
       }
 
-      if (!birthdate || birthdate > birthdateInput.max) {
+      if (!birthdate || birthdate > getTodayString()) {
         showMessage("Introduce una fecha de nacimiento válida.", "error");
         return;
       }
 
       if (calculateAge(birthdate) < 13) {
-        showMessage("Debes tener al menos 13 años para usar FogoSM.", "error");
+        showMessage(
+          "Debes tener al menos 13 años para usar FogoSM.",
+          "error"
+        );
         return;
       }
 
-      if (!/[a-z]/.test(password) || !/[0-9]/.test(password) || password.length < 3) {
+      if (
+        password.length < 3 ||
+        !/[a-z]/.test(password) ||
+        !/[0-9]/.test(password)
+      ) {
         showMessage(
           "La contraseña necesita al menos 3 caracteres, un número y una letra minúscula.",
           "error"
@@ -502,8 +574,13 @@
         return;
       }
 
-      if (!window.supabaseClient) {
-        showMessage("No se ha podido conectar con Supabase. Revisa supabase.js.", "error");
+      const client = window.supabaseClient;
+
+      if (!client) {
+        showMessage(
+          "No se ha podido conectar con Supabase. Revisa supabase.js.",
+          "error"
+        );
         return;
       }
 
@@ -511,53 +588,59 @@
       submitButton.textContent = "Creando tu cuenta…";
 
       try {
+        const { data, error } = await client.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo:
+              "https://fogosmofficial-pixel.github.io/FogoSMConfirmation/",
+            data: {
+              username,
+              date_of_birth: birthdate
+            }
+          }
+        });
 
-const { data, error } = await supabaseClient.auth.signUp({
-  email,
-  password,
-  options: {
-    emailRedirectTo: "https://fogosmofficial-pixel.github.io/FogoSMConfirmation/",
-    data: {
-      username,
-      date_of_birth: birthdate
-    }
-  }
-});
-        if (error) throw error;
+        if (error) {
+          throw error;
+        }
 
         if (data.session) {
-          showMessage("¡Cuenta creada! Entrando en FogoSM…", "success");
+          showMessage(
+            "¡Cuenta creada! Entrando en FogoSM…",
+            "success"
+          );
+
           window.location.href = "homepage.html";
           return;
         }
 
         showMessage(
-          "¡Casi listo! Si Supabase requiere verificar tu correo, revisa tu bandeja de entrada y la carpeta de spam antes de iniciar sesión.",
+          "¡Casi listo! Revisa tu correo electrónico y la carpeta de spam para confirmar tu cuenta antes de iniciar sesión.",
           "success"
         );
+
         submitButton.textContent = "Cuenta creada";
       } catch (error) {
-        let text = error.message || "No se ha podido crear la cuenta.";
+        let errorText =
+          error.message || "No se ha podido crear la cuenta.";
 
-        if (/rate limit|email rate limit exceeded/i.test(text)) {
-          text = "Se han enviado demasiados correos en poco tiempo. Espera antes de volver a intentarlo.";
-        } else if (/already registered|already exists/i.test(text)) {
-          text = "Ese correo ya está registrado. Prueba a iniciar sesión.";
+        if (/rate limit|email rate limit exceeded/i.test(errorText)) {
+          errorText =
+            "Se han enviado demasiados correos en poco tiempo. Espera antes de volver a intentarlo.";
+        } else if (/already registered|already exists/i.test(errorText)) {
+          errorText =
+            "Ese correo ya está registrado. Prueba a iniciar sesión.";
         }
 
-        showMessage(text, "error");
+        showMessage(errorText, "error");
+
         submitButton.disabled = false;
         submitButton.textContent = "Crear mi cuenta →";
       }
     });
   </script>
-  
-<div class="beta-notice">
-    FogoSM BETA v0.1 🚧
-</div>
-</body>
+
+  <div class="beta-notice">FogoSM BETA v0.1 🚧</div>
 </body>
 </html>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>

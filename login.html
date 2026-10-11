@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0c0b10">
   <title>Iniciar sesión | FogoSM</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +24,9 @@
       --border: #302b38;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -136,7 +139,9 @@
       line-height: 1.7;
     }
 
-    .field { margin-bottom: 19px; }
+    .field {
+      margin-bottom: 19px;
+    }
 
     label {
       display: block;
@@ -164,11 +169,17 @@
       box-shadow: 0 0 0 3px #ff762e20;
     }
 
-    input::placeholder { color: #797383; }
+    input::placeholder {
+      color: #797383;
+    }
 
-    .password-wrap { position: relative; }
+    .password-wrap {
+      position: relative;
+    }
 
-    .password-wrap input { padding-right: 78px; }
+    .password-wrap input {
+      padding-right: 78px;
+    }
 
     .show-password {
       position: absolute;
@@ -250,7 +261,9 @@
       font-weight: 900;
     }
 
-    a:hover { text-decoration: underline; }
+    a:hover {
+      text-decoration: underline;
+    }
 
     .back-link {
       display: inline-block;
@@ -260,8 +273,26 @@
       text-align: center;
     }
 
+    .beta-notice {
+      position: fixed;
+      bottom: 12px;
+      right: 12px;
+      z-index: 9999;
+      padding: 8px 13px;
+      border: 1px solid #ffffff26;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .5px;
+      box-shadow: 0 4px 18px #ee097940;
+    }
+
     @media (max-width: 700px) {
-      body { padding: 14px; }
+      body {
+        padding: 14px;
+      }
 
       .layout {
         max-width: 460px;
@@ -281,13 +312,19 @@
         margin-bottom: 10px;
       }
 
-      .hero-note { display: none; }
+      .hero-note {
+        display: none;
+      }
 
-      .form-panel { padding: 30px 23px; }
+      .form-panel {
+        padding: 30px 23px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
+      *,
+      *::before,
+      *::after {
         transition: none !important;
       }
     }
@@ -344,7 +381,12 @@
               autocomplete="current-password"
               required
             >
-            <button class="show-password" type="button" id="togglePassword">
+            <button
+              class="show-password"
+              type="button"
+              id="togglePassword"
+              aria-label="Mostrar u ocultar contraseña"
+            >
               Mostrar
             </button>
           </div>
@@ -366,6 +408,7 @@
     </section>
   </main>
 
+  <!-- Supabase: estos dos scripts deben cargarse antes del código de login -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase.js"></script>
 
@@ -394,8 +437,14 @@
       const email = document.getElementById("email").value.trim();
       const password = passwordInput.value;
 
-      if (!window.supabaseClient) {
-        showMessage("No se ha podido conectar con Supabase. Revisa supabase.js.", "error");
+      // Comprueba que supabase.js haya creado el cliente.
+      const client = window.supabaseClient;
+
+      if (!client) {
+        showMessage(
+          "No se ha podido conectar con Supabase. Revisa supabase.js.",
+          "error"
+        );
         return;
       }
 
@@ -403,38 +452,47 @@
       submitButton.textContent = "Entrando…";
 
       try {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
+        const { data, error } = await client.auth.signInWithPassword({
           email,
           password
         });
 
         if (error) {
           if (/email not confirmed/i.test(error.message)) {
-            throw new Error("Primero debes verificar tu correo electrónico. Revisa tu bandeja de entrada y la carpeta de spam.");
+            throw new Error(
+              "Primero debes verificar tu correo electrónico. Revisa tu bandeja de entrada y la carpeta de spam."
+            );
           }
-          throw new Error("No se ha podido iniciar sesión. Comprueba tu correo y contraseña y, si acabas de registrarte, verifica tu correo.");
+
+          throw new Error(
+            "No se ha podido iniciar sesión. Comprueba tu correo y contraseña y, si acabas de registrarte, verifica tu correo."
+          );
         }
 
         if (!data.session) {
-          throw new Error("No se ha iniciado una sesión. Inténtalo de nuevo.");
+          throw new Error(
+            "No se ha iniciado una sesión. Inténtalo de nuevo."
+          );
         }
 
-        showMessage("¡Bienvenido de nuevo! Abriendo FogoSM…", "success");
+        showMessage(
+          "¡Bienvenido de nuevo! Abriendo FogoSM…",
+          "success"
+        );
+
         window.location.href = "homepage.html";
       } catch (error) {
-        showMessage(error.message || "Ha ocurrido un error. Inténtalo de nuevo.", "error");
+        showMessage(
+          error.message || "Ha ocurrido un error. Inténtalo de nuevo.",
+          "error"
+        );
+
         submitButton.disabled = false;
         submitButton.textContent = "Iniciar sesión →";
       }
     });
- 
-</script>
-<div class="beta-notice">
-    FogoSM BETA v0.1 🚧
-</div>
-</body>
+  </script>
+
+  <div class="beta-notice">FogoSM BETA v0.1 🚧</div>
 </body>
 </html>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>

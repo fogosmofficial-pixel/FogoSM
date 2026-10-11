@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión | FogoSM</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0c0b10;
+      --panel: #15131b;
+      --field: #201d27;
+      --text: #f8f7fb;
+      --muted: #a5a0b0;
+      --orange: #ff762e;
+      --pink: #ff405f;
+      --border: #302b38;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 28px 18px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(ellipse at 15% 10%, #702b291f, transparent 40%),
+        radial-gradient(ellipse at 90% 90%, #ff5b2716, transparent 38%),
+        var(--bg);
+      color: var(--text);
+      font-family: "Nunito", sans-serif;
+    }
+
+    .layout {
+      width: min(100%, 960px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #111016;
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: 0 28px 90px #0007;
+    }
+
+    .hero {
+      padding: 42px 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 550px;
+      background:
+        radial-gradient(ellipse at 20% 15%, #ff792b35, transparent 48%),
+        linear-gradient(145deg, #23151b, #14121a 75%);
+      border-right: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 23px;
+      font-weight: 900;
+      letter-spacing: -0.7px;
+    }
+
+    .logo {
+      width: 43px;
+      height: 43px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      background: linear-gradient(135deg, var(--orange), var(--pink));
+      color: white;
+      font-size: 25px;
+      box-shadow: 0 7px 25px #ff592e38;
+    }
+
+    .hero h1 {
+      font-size: clamp(35px, 4vw, 49px);
+      line-height: 1.06;
+      letter-spacing: -1.8px;
+      margin: 0 0 18px;
+      font-weight: 900;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(90deg, #ff9b48, #ff536e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 15px;
+      margin: 0;
+    }
+
+    .hero-note {
+      padding: 17px;
+      border: 1px solid #ffffff12;
+      background: #ffffff06;
+      border-radius: 17px;
+      color: #d5cfdb;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .form-panel {
+      padding: 42px 38px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form-panel h2 {
+      margin: 0 0 7px;
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: -0.8px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0 0 30px;
+      line-height: 1.7;
+    }
+
+    .field { margin-bottom: 19px; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      min-height: 49px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      outline: none;
+      background: var(--field);
+      color: var(--text);
+      font: inherit;
+      font-size: 14px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    input:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px #ff762e20;
+    }
+
+    input::placeholder { color: #797383; }
+
+    .password-wrap { position: relative; }
+
+    .password-wrap input { padding-right: 78px; }
+
+    .show-password {
+      position: absolute;
+      right: 9px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 0;
+      background: transparent;
+      color: #ff9b67;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .primary {
+      width: 100%;
+      min-height: 51px;
+      border: 0;
+      border-radius: 13px;
+      margin-top: 6px;
+      color: white;
+      background: linear-gradient(100deg, var(--orange), var(--pink));
+      font: inherit;
+      font-size: 15px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 8px 25px #ff542c25;
+      transition: transform .2s, filter .2s;
+    }
+
+    .primary:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
+    }
+
+    .primary:disabled {
+      cursor: wait;
+      opacity: .65;
+      transform: none;
+    }
+
+    .message {
+      display: none;
+      padding: 12px 14px;
+      margin-top: 16px;
+      border-radius: 11px;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .message.error {
+      display: block;
+      color: #ffb6be;
+      background: #ff405f14;
+      border: 1px solid #ff405f40;
+    }
+
+    .message.success {
+      display: block;
+      color: #9cf0bd;
+      background: #36c87913;
+      border: 1px solid #36c87940;
+    }
+
+    .switch {
+      text-align: center;
+      margin-top: 25px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    a {
+      color: #ff9563;
+      text-decoration: none;
+      font-weight: 900;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @media (max-width: 700px) {
+      body { padding: 14px; }
+
+      .layout {
+        max-width: 460px;
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 24px;
+        gap: 26px;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .hero h1 {
+        font-size: 34px;
+        margin-bottom: 10px;
+      }
+
+      .hero-note { display: none; }
+
+      .form-panel { padding: 30px 23px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="layout">
+    <section class="hero">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">F</div>
+        <span>FogoSM</span>
+      </div>
+
+      <div>
+        <h1>Qué bueno<br>tenerte <span>de vuelta.</span></h1>
+        <p>
+          Vuelve a tu comunidad, descubre las novedades
+          y continúa compartiendo tus ideas.
+        </p>
+      </div>
+
+      <div class="hero-note">
+        🔥 Tu comunidad te espera.<br>
+        Entra y sigue formando parte de FogoSM.
+      </div>
+    </section>
+
+    <section class="form-panel">
+      <h2>¡Hola de nuevo!</h2>
+      <p class="subtitle">Introduce tus datos para entrar en tu cuenta.</p>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">Correo electrónico</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="tu@email.com"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="password">Contraseña</label>
+          <div class="password-wrap">
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Tu contraseña"
+              autocomplete="current-password"
+              required
+            >
+            <button class="show-password" type="button" id="togglePassword">
+              Mostrar
+            </button>
+          </div>
+        </div>
+
+        <button class="primary" id="submitButton" type="submit">
+          Iniciar sesión →
+        </button>
+
+        <div id="message" class="message" role="status" aria-live="polite"></div>
+      </form>
+
+      <div class="switch">
+        ¿Todavía no tienes cuenta?<br>
+        <a href="register.html">Crear una cuenta gratis</a>
+      </div>
+
+      <a class="back-link" href="home.html">← Volver a la página de bienvenida</a>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    const message = document.getElementById("message");
+    const submitButton = document.getElementById("submitButton");
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+
+    togglePassword.addEventListener("click", () => {
+      const show = passwordInput.type === "password";
+      passwordInput.type = show ? "text" : "password";
+      togglePassword.textContent = show ? "Ocultar" : "Mostrar";
+    });
+
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = "message " + type;
+    }
+
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      message.className = "message";
+
+      const email = document.getElementById("email").value.trim();
+      const password = passwordInput.value;
+
+      if (!window.supabaseClient) {
+        showMessage("No se ha podido conectar con Supabase. Revisa supabase.js.", "error");
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Entrando…";
+
+      try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (error) {
+          if (/email not confirmed/i.test(error.message)) {
+            throw new Error("Primero debes verificar tu correo electrónico. Revisa tu bandeja de entrada y la carpeta de spam.");
+          }
+          throw new Error("No se ha podido iniciar sesión. Comprueba tu correo y contraseña y, si acabas de registrarte, verifica tu correo.");
+        }
+
+        if (!data.session) {
+          throw new Error("No se ha iniciado una sesión. Inténtalo de nuevo.");
+        }
+
+        showMessage("¡Bienvenido de nuevo! Abriendo FogoSM…", "success");
+        window.location.href = "homepage.html";
+      } catch (error) {
+        showMessage(error.message || "Ha ocurrido un error. Inténtalo de nuevo.", "error");
+        submitButton.disabled = false;
+        submitButton.textContent = "Iniciar sesión →";
+      }
+    });
+ 
+</script>
+<div class="beta-notice">
+    FogoSM BETA v0.1 🚧
+</div>
+</body>
+</body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>

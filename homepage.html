@@ -1,0 +1,649 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101014">
+  <title>FogoSM — Discover your world</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="brand" href="homepage.html" aria-label="FogoSM Inicio">
+      <span class="brand-symbol">F</span>
+      <span>Fogo<span class="brand-accent">SM</span></span>
+    </a>
+
+    <form class="search-box" id="searchForm">
+      <icon></icon>
+      <span class="search-icon">⌕</span>
+      <input id="searchInput" type="search" placeholder="Buscar vídeos, creadores y temas..." aria-label="Buscar">
+      <button type="submit" aria-label="Buscar">Buscar</button>
+    </form>
+
+    <div class="top-actions">
+      <button class="icon-button create-top" id="topCreate" title="Crear publicación">＋ <span>Crear</span></button>
+      <button class="avatar avatar-small" id="topAvatar" title="Mi perfil">F</button>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <aside class="sidebar">
+      <nav class="nav-group" aria-label="Navegación principal">
+        <button class="nav-item active" data-view="home"><span class="nav-icon">⌂</span> Inicio</button>
+        <button class="nav-item" data-view="shorts"><span class="nav-icon">▷</span> Shorts <span class="nav-new">NEW</span></button>
+        <button class="nav-item" data-view="explore"><span class="nav-icon">✳</span> Explorar</button>
+        <button class="nav-item" data-view="following"><span class="nav-icon">♧</span> Siguiendo</button>
+      </nav>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-heading">TU ESPACIO</div>
+      <nav class="nav-group">
+        <button class="nav-item" data-view="saved"><span class="nav-icon">♧</span> Guardados</button>
+        <button class="nav-item" data-view="profile"><span class="nav-icon">◎</span> Mi perfil</button>
+      </nav>
+
+      <div class="sidebar-card">
+        <div class="flame">✦</div>
+        <h3>Tu mundo. Tu fuego.</h3>
+        <p>Descubre contenido, comparte tus ideas y encuentra tu comunidad.</p>
+        <button id="sidebarCreate" class="gradient-button">Crear publicación <span>↗</span></button>
+      </div>
+
+      <div class="sidebar-footer">
+        <span>FOGOSM © 2026</span>
+        <p>Hecho para descubrir.</p>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <section class="welcome-row">
+        <div>
+          <div class="eyebrow"><span class="live-dot"></span> TU FEED, A TU MANERA</div>
+          <h1 id="pageTitle">Descubre tu <span>próximo favorito.</span></h1>
+          <p id="pageSubtitle">Ideas, vídeos y personas que merecen tu atención.</p>
+        </div>
+        <button class="gradient-button welcome-create" id="welcomeCreate">＋ Crear</button>
+      </section>
+
+      <section class="stories-section" id="storiesSection">
+        <div class="section-heading">
+          <div>
+            <h2>En el radar <span class="heading-spark">✦</span></h2>
+            <p>Un poco de inspiración para empezar.</p>
+          </div>
+          <span class="section-label">DESCUBRIR</span>
+        </div>
+
+        <div class="story-list">
+          <button class="story-card story-create" id="storyCreate">
+            <span class="story-plus">＋</span>
+            <span class="story-label">Tu idea</span>
+            <small>Publica algo</small>
+          </button>
+
+          <button class="story-card story-one" data-topic="gaming">
+            <span class="story-art">🎮</span>
+            <span class="story-label">Gaming</span>
+            <small>Play your way</small>
+          </button>
+
+          <button class="story-card story-two" data-topic="creatividad">
+            <span class="story-art">🎨</span>
+            <span class="story-label">Creatividad</span>
+            <small>Ideas sin límites</small>
+          </button>
+
+          <button class="story-card story-three" data-topic="humor">
+            <span class="story-art">😂</span>
+            <span class="story-label">Humor</span>
+            <small>Good vibes only</small>
+          </button>
+
+          <button class="story-card story-four" data-topic="deportes">
+            <span class="story-art">⚽</span>
+            <span class="story-label">Deportes</span>
+            <small>Play it loud</small>
+          </button>
+        </div>
+      </section>
+
+      <section class="feed-section" id="feedSection">
+        <div class="section-heading feed-heading">
+          <div>
+            <h2 id="feedHeading">Para ti <span class="heading-spark">✦</span></h2>
+            <p id="feedDescription">Lo más interesante empieza aquí.</p>
+          </div>
+          <div class="feed-controls">
+            <button class="filter-button selected" data-filter="all">Todo</button>
+            <button class="filter-button" data-filter="text">Publicaciones</button>
+          </div>
+        </div>
+
+        <form class="composer" id="postForm">
+          <div class="composer-top">
+            <div class="avatar" id="composerAvatar">F</div>
+            <label class="composer-input-wrap" for="postContent">
+              <textarea id="postContent" maxlength="1000" rows="2" placeholder="¿Qué está pasando por tu mundo?" required></textarea>
+            </label>
+          </div>
+          <div class="composer-bottom">
+            <div class="composer-tools">
+              <span class="composer-hint">✦ Comparte algo que merezca la pena.</span>
+              <span id="charCount">0/1000</span>
+            </div>
+            <button class="gradient-button publish-button" id="publishButton" type="submit">Publicar <span>↗</span></button>
+          </div>
+        </form>
+
+        <div class="feed-status" id="feedStatus" role="status">Preparando tu feed...</div>
+        <div class="post-list" id="postList"></div>
+
+        <div class="empty-state hidden" id="emptyState">
+          <div class="empty-icon">✦</div>
+          <h3>Tu feed está esperando.</h3>
+          <p>Cuando haya publicaciones disponibles, aparecerán aquí. También puedes ser quien empiece.</p>
+          <button class="gradient-button" id="emptyCreate">Crear primera publicación</button>
+        </div>
+      </section>
+
+      <section class="shorts-section hidden" id="shortsSection">
+        <div class="section-heading">
+          <div>
+            <h2>Fogo <span class="brand-accent">Shorts</span> <span class="heading-spark">▷</span></h2>
+            <p>Contenido vertical, rápido y directo.</p>
+          </div>
+          <span class="section-label">FORMATO VERTICAL</span>
+        </div>
+
+        <div class="shorts-grid">
+          <article class="short-card short-a">
+            <div class="short-emoji">🎮</div>
+            <span class="short-play">▷</span>
+            <div class="short-copy"><span>GAMING</span><h3>La próxima jugada puede cambiarlo todo.</h3></div>
+          </article>
+          <article class="short-card short-b">
+            <div class="short-emoji">🎨</div>
+            <span class="short-play">▷</span>
+            <div class="short-copy"><span>CREATIVIDAD</span><h3>Las ideas grandes empiezan pequeñas.</h3></div>
+          </article>
+          <article class="short-card short-c">
+            <div class="short-emoji">⚡</div>
+            <span class="short-play">▷</span>
+            <div class="short-copy"><span>VIBES</span><h3>Haz que tu próximo momento cuente.</h3></div>
+          </article>
+        </div>
+        <p class="demo-note">Vista previa de diseño. Los vídeos reales se añadirán cuando conectemos la subida y el almacenamiento de vídeo.</p>
+      </section>
+
+      <section class="profile-section hidden" id="profileSection">
+        <div class="profile-banner"></div>
+        <div class="profile-details">
+          <div class="avatar profile-avatar" id="profileAvatar">F</div>
+          <div>
+            <h2 id="profileName">Tu perfil</h2>
+            <p id="profileHandle">@fogosm</p>
+          </div>
+        </div>
+        <p class="profile-bio">Este es tu espacio en FogoSM. Comparte tus ideas y encuentra tu comunidad.</p>
+        <div class="profile-stats"><span><strong id="profilePostCount">0</strong> publicaciones</span></div>
+        <h3 class="profile-posts-title">Tus publicaciones</h3>
+        <div id="profilePosts" class="post-list"></div>
+      </section>
+    </main>
+
+    <aside class="rightbar">
+      <section class="right-card trend-card">
+        <div class="right-card-heading">
+          <div><span class="eyebrow">EN MOVIMIENTO</span><h2>Explora tendencias</h2></div>
+          <span class="trend-spark">✦</span>
+        </div>
+
+        <button class="trend-item" data-topic="gaming">
+          <span class="trend-number">01</span><span class="trend-copy"><strong>#Gaming</strong><small>Juega y descubre</small></span><span>↗</span>
+        </button>
+        <button class="trend-item" data-topic="creatividad">
+          <span class="trend-number">02</span><span class="trend-copy"><strong>#Creatividad</strong><small>Ideas que inspiran</small></span><span>↗</span>
+        </button>
+        <button class="trend-item" data-topic="humor">
+          <span class="trend-number">03</span><span class="trend-copy"><strong>#Humor</strong><small>Un poco de diversión</small></span><span>↗</span>
+        </button>
+        <button class="trend-item" data-topic="deportes">
+          <span class="trend-number">04</span><span class="trend-copy"><strong>#Deportes</strong><small>Todo por el juego</small></span><span>↗</span>
+        </button>
+      </section>
+
+      <section class="right-card community-card">
+        <div class="community-orb">✦</div>
+        <span class="eyebrow">BIENVENIDO A FOGOSM</span>
+        <h2>Tu voz también importa.</h2>
+        <p>Publica tus ideas y deja que otras personas las descubran.</p>
+        <button class="outline-button" id="communityCreate">Comparte tu primera idea ↗</button>
+      </section>
+
+      <div class="right-footer">
+        <span>Acerca de</span><span>Privacidad</span><span>Ayuda</span>
+        <p>FogoSM · Tu mundo, tu fuego. 🔥</p>
+      </div>
+    </aside>
+  </div>
+
+  <nav class="mobile-nav" aria-label="Navegación móvil">
+    <button class="mobile-nav-item active" data-view="home"><span>⌂</span>Inicio</button>
+    <button class="mobile-nav-item" data-view="explore"><span>✳</span>Explorar</button>
+    <button class="mobile-create" id="mobileCreate" aria-label="Crear publicación">＋</button>
+    <button class="mobile-nav-item" data-view="shorts"><span>▷</span>Shorts</button>
+    <button class="mobile-nav-item" data-view="profile"><span>◎</span>Perfil</button>
+  </nav>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const $ = (selector) => document.querySelector(selector);
+
+    const postList = $("#postList");
+    const feedStatus = $("#feedStatus");
+    const emptyState = $("#emptyState");
+    const postForm = $("#postForm");
+    const postContent = $("#postContent");
+    const publishButton = $("#publishButton");
+    const toast = $("#toast");
+
+    let currentUser = null;
+    let allPosts = [];
+    let activeView = "home";
+    let activeFilter = "all";
+    let searchTerm = "";
+    let selectedTopic = "";
+    const likedPosts = new Set();
+    const savedPosts = new Set();
+
+    function notify(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(notify.timer);
+      notify.timer = setTimeout(() => toast.classList.remove("show"), 3000);
+    }
+
+    function escapeHTML(value = "") {
+      return String(value).replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;",
+        '"': "&quot;", "'": "&#39;"
+      })[char]);
+    }
+
+    function getUsername(user) {
+      return user?.user_metadata?.username
+        || user?.email?.split("@")[0]
+        || "Usuario";
+    }
+
+    function getInitial(username) {
+      return (username || "F").trim().charAt(0).toUpperCase() || "F";
+    }
+
+    function timeAgo(dateValue) {
+      const seconds = Math.max(0, Math.floor((Date.now() - new Date(dateValue).getTime()) / 1000));
+      if (seconds < 60) return "Ahora";
+      if (seconds < 3600) return `Hace ${Math.floor(seconds / 60)} min`;
+      if (seconds < 86400) return `Hace ${Math.floor(seconds / 3600)} h`;
+      if (seconds < 604800) return `Hace ${Math.floor(seconds / 86400)} d`;
+      return new Date(dateValue).toLocaleDateString("es-ES");
+    }
+
+    function updateUserUI() {
+      const username = getUsername(currentUser);
+      const initial = getInitial(username);
+
+      $("#composerAvatar").textContent = initial;
+      $("#topAvatar").textContent = initial;
+      $("#profileAvatar").textContent = initial;
+      $("#profileName").textContent = username;
+      $("#profileHandle").textContent = "@" + username.replace(/\s+/g, "").toLowerCase();
+    }
+
+    function focusComposer() {
+      if (!currentUser) {
+        notify("Inicia sesión para publicar.");
+        return;
+      }
+      setView("home");
+      postContent.focus();
+      $("#postForm").scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function setView(view) {
+      activeView = view;
+      const titles = {
+        home: ["Descubre tu ", "próximo favorito.", "Ideas, vídeos y personas que merecen tu atención.", "Para ti", "Lo más interesante empieza aquí."],
+        explore: ["Encuentra algo ", "extraordinario.", "Explora publicaciones y descubre nuevos temas.", "Explorar", "Descubre lo que se está compartiendo."],
+        following: ["No te pierdas ", "ni un momento.", "El contenido de tus creadores favoritos.", "Siguiendo", "Las publicaciones que te interesan."],
+        saved: ["Tu colección ", "personal.", "Aquí encontrarás tus publicaciones guardadas.", "Guardados", "Tu contenido favorito, en un solo lugar."],
+        shorts: ["Pequeños vídeos, ", "grandes momentos.", "Descubre el formato vertical de FogoSM.", "Fogo Shorts", "Vídeos verticales y contenido rápido."],
+        profile: ["Este es tu ", "espacio.", "Tu perfil y las publicaciones que compartes.", "Tu perfil", "Todo lo que has publicado."]
+      };
+
+      const details = titles[view] || titles.home;
+      $("#pageTitle").innerHTML = `${details[0]}<span>${details[1]}</span>`;
+      $("#pageSubtitle").textContent = details[2];
+      $("#feedHeading").innerHTML = `${details[3]} <span class="heading-spark">✦</span>`;
+      $("#feedDescription").textContent = details[4];
+
+      $("#storiesSection").classList.toggle("hidden", view !== "home" && view !== "explore");
+      $("#feedSection").classList.toggle("hidden", view === "shorts" || view === "profile");
+      $("#shortsSection").classList.toggle("hidden", view !== "shorts");
+      $("#profileSection").classList.toggle("hidden", view !== "profile");
+      $("#postForm").classList.toggle("hidden", view === "saved" || view === "following");
+
+      document.querySelectorAll("[data-view]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.view === view);
+      });
+
+      renderPosts();
+    }
+
+    function filteredPosts() {
+      let posts = [...allPosts];
+
+      if (activeView === "saved") {
+        posts = posts.filter((post) => savedPosts.has(post.id));
+      }
+
+      if (activeView === "following") {
+        posts = [];
+      }
+
+      if (activeView === "profile") {
+        posts = posts.filter((post) => post.user_id === currentUser?.id);
+      }
+
+      if (selectedTopic) {
+        posts = posts.filter((post) => post.content.toLowerCase().includes(selectedTopic));
+      }
+
+      if (searchTerm) {
+        posts = posts.filter((post) =>
+          (post.content + " " + post.username).toLowerCase().includes(searchTerm)
+        );
+      }
+
+      return posts;
+    }
+
+    function postMarkup(post) {
+      const username = post.username || "Usuario";
+      const isLiked = likedPosts.has(post.id);
+      const isSaved = savedPosts.has(post.id);
+      const isMine = currentUser && post.user_id === currentUser.id;
+
+      return `
+        <article class="post-card" data-post-id="${escapeHTML(post.id)}">
+          <div class="post-header">
+            <div class="avatar post-avatar">${escapeHTML(getInitial(username))}</div>
+            <div class="post-author">
+              <strong>${escapeHTML(username)}</strong>
+              <span>${escapeHTML(timeAgo(post.created_at))}</span>
+            </div>
+            ${isMine ? '<span class="you-badge">TU PUBLICACIÓN</span>' : ""}
+            <button class="post-more" data-action="more" data-id="${escapeHTML(post.id)}" aria-label="Más opciones">···</button>
+          </div>
+          <div class="post-body">${escapeHTML(post.content).replace(/\n/g, "<br>")}</div>
+          <div class="post-tags"><span>#FogoSM</span><span>#ComparteTuMundo</span></div>
+          <div class="post-actions">
+            <button class="post-action ${isLiked ? "liked" : ""}" data-action="like" data-id="${escapeHTML(post.id)}">♡ <span>${isLiked ? "Te gusta" : "Me gusta"}</span></button>
+            <button class="post-action" data-action="comment" data-id="${escapeHTML(post.id)}">◯ <span>Comentar</span></button>
+            <button class="post-action ${isSaved ? "saved" : ""}" data-action="save" data-id="${escapeHTML(post.id)}">♧ <span>${isSaved ? "Guardado" : "Guardar"}</span></button>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderPosts() {
+      if (activeView === "shorts") return;
+
+      if (activeView === "following") {
+        postList.innerHTML = "";
+        feedStatus.classList.add("hidden");
+        emptyState.classList.remove("hidden");
+        emptyState.querySelector("h3").textContent = "Tu lista empieza aquí.";
+        emptyState.querySelector("p").textContent = "La función de seguir creadores estará disponible cuando añadamos el sistema de seguidores.";
+        emptyState.querySelector("button").classList.add("hidden");
+        return;
+      }
+
+      const posts = filteredPosts();
+      postList.innerHTML = posts.map(postMarkup).join("");
+      feedStatus.classList.add("hidden");
+
+      if (activeView === "profile") {
+        $("#profilePostCount").textContent = posts.length;
+        $("#profilePosts").innerHTML = posts.map(postMarkup).join("");
+      }
+
+      emptyState.classList.toggle("hidden", posts.length > 0);
+      if (posts.length === 0) {
+        const title = activeView === "saved" ? "Todavía no has guardado nada."
+          : activeView === "profile" ? "Tu primera publicación te espera."
+          : searchTerm || selectedTopic ? "No encontramos resultados."
+          : "Tu feed está esperando.";
+
+        emptyState.querySelector("h3").textContent = title;
+        emptyState.querySelector("p").textContent =
+          activeView === "saved" ? "Usa Guardar en una publicación para encontrarla aquí."
+          : "Prueba otra búsqueda o comparte algo para empezar.";
+        emptyState.querySelector("button").classList.toggle("hidden", !currentUser);
+      }
+    }
+
+    async function loadPosts() {
+      feedStatus.classList.remove("hidden");
+      feedStatus.textContent = "Cargando publicaciones...";
+      emptyState.classList.add("hidden");
+
+      try {
+        const { data, error } = await supabaseClient
+          .from("posts")
+          .select("id, user_id, username, content, created_at")
+          .order("created_at", { ascending: false })
+          .limit(50);
+
+        if (error) throw error;
+
+        allPosts = data || [];
+        renderPosts();
+      } catch (error) {
+        console.error("Error loading posts:", error);
+        feedStatus.classList.remove("hidden");
+        feedStatus.textContent = "No se pudieron cargar las publicaciones. Comprueba tu conexión y las políticas de Supabase.";
+        postList.innerHTML = "";
+      }
+    }
+
+    postContent.addEventListener("input", () => {
+      $("#charCount").textContent = `${postContent.value.length}/1000`;
+    });
+
+    postForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const content = postContent.value.trim();
+      if (!content) return notify("Escribe algo antes de publicar.");
+      if (!currentUser) return notify("Inicia sesión para publicar.");
+      if (content.length > 1000) return notify("Tu publicación es demasiado larga.");
+
+      publishButton.disabled = true;
+      publishButton.innerHTML = "Publicando…";
+
+      try {
+        const { data, error } = await supabaseClient
+          .from("posts")
+          .insert({
+            user_id: currentUser.id,
+            username: getUsername(currentUser),
+            content
+          })
+          .select("id, user_id, username, content, created_at")
+          .single();
+
+        if (error) throw error;
+
+        allPosts.unshift(data);
+        postContent.value = "";
+        $("#charCount").textContent = "0/1000";
+        selectedTopic = "";
+        searchTerm = "";
+        $("#searchInput").value = "";
+        setView("home");
+        notify("¡Publicación compartida! 🔥");
+      } catch (error) {
+        console.error("Error publishing:", error);
+        notify("No se pudo publicar. Comprueba tu sesión y las políticas de Supabase.");
+      } finally {
+        publishButton.disabled = false;
+        publishButton.innerHTML = "Publicar <span>↗</span>";
+      }
+    });
+
+    document.addEventListener("click", async (event) => {
+      const viewButton = event.target.closest("[data-view]");
+      if (viewButton) {
+        setView(viewButton.dataset.view);
+        return;
+      }
+
+      const topicButton = event.target.closest("[data-topic]");
+      if (topicButton) {
+        selectedTopic = topicButton.dataset.topic.toLowerCase();
+        searchTerm = "";
+        $("#searchInput").value = "";
+        setView("explore");
+        return;
+      }
+
+      const actionButton = event.target.closest("[data-action]");
+      if (!actionButton) return;
+
+      const { action, id } = actionButton.dataset;
+
+      if (action === "like") {
+        if (likedPosts.has(id)) likedPosts.delete(id);
+        else likedPosts.add(id);
+        renderPosts();
+      }
+
+      if (action === "save") {
+        if (savedPosts.has(id)) {
+          savedPosts.delete(id);
+          notify("Publicación quitada de Guardados.");
+        } else {
+          savedPosts.add(id);
+          notify("Guardado en este dispositivo.");
+        }
+        renderPosts();
+      }
+
+      if (action === "comment") {
+        notify("Los comentarios estarán disponibles cuando conectemos su sistema.");
+      }
+
+      if (action === "more") {
+        const post = allPosts.find((item) => item.id === id);
+        if (post && currentUser?.id === post.user_id) {
+          if (confirm("¿Quieres eliminar tu publicación?")) {
+            try {
+              const { error } = await supabaseClient
+                .from("posts")
+                .delete()
+                .eq("id", id)
+                .eq("user_id", currentUser.id);
+
+              if (error) throw error;
+              allPosts = allPosts.filter((item) => item.id !== id);
+              renderPosts();
+              notify("Publicación eliminada.");
+            } catch (error) {
+              console.error(error);
+              notify("No se pudo eliminar. Comprueba las políticas de Supabase.");
+            }
+          }
+        } else {
+          notify("Más opciones estarán disponibles próximamente.");
+        }
+      }
+    });
+
+    $("#searchForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      searchTerm = $("#searchInput").value.trim().toLowerCase();
+      selectedTopic = "";
+      setView("explore");
+    });
+
+    $("#searchInput").addEventListener("input", () => {
+      if (!$("#searchInput").value.trim()) {
+        searchTerm = "";
+        renderPosts();
+      }
+    });
+
+    document.querySelectorAll("[data-filter]").forEach((button) => {
+      button.addEventListener("click", () => {
+        activeFilter = button.dataset.filter;
+        document.querySelectorAll("[data-filter]").forEach((item) => item.classList.remove("selected"));
+        button.classList.add("selected");
+        notify(activeFilter === "text" ? "Mostrando publicaciones de texto." : "Mostrando todo el contenido disponible.");
+      });
+    });
+
+    [
+      "#topCreate", "#sidebarCreate", "#welcomeCreate", "#storyCreate",
+      "#emptyCreate", "#communityCreate", "#mobileCreate"
+    ].forEach((selector) => {
+      $(selector).addEventListener("click", focusComposer);
+    });
+
+    $("#topAvatar").addEventListener("click", () => setView("profile"));
+
+    async function init() {
+      try {
+        const { data, error } = await supabaseClient.auth.getUser();
+        if (error) console.warn("Session lookup:", error.message);
+        currentUser = data?.user || null;
+      } catch (error) {
+        console.error("Auth error:", error);
+      }
+
+      updateUserUI();
+
+      if (!currentUser) {
+        notify("Puedes explorar FogoSM. Inicia sesión para publicar.");
+      }
+
+      await loadPosts();
+      setView("home");
+
+      supabaseClient.auth.onAuthStateChange((_event, session) => {
+        currentUser = session?.user || null;
+        updateUserUI();
+        renderPosts();
+      });
+    }
+
+    init();
+ 
+</script>
+<div class="beta-notice">
+    FogoSM BETA v0.1 🚧
+</div>
+</body>
+</html>

@@ -1,496 +1,92 @@
+
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#101014">
+    <title>FogoSM — Tu mundo, tu espacio</title>
 
-    <title>FogoSM</title>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="fogo-home">
+<body class="welcome-page">
 
-    <!-- =====================================================
-         NAVBAR
-         ===================================================== -->
+    <header class="welcome-header">
+        <a href="home.html" class="welcome-logo">
+            <span class="welcome-logo-icon">F</span>
+            <span>Fogo<span class="welcome-sm">SM</span></span>
+        </a>
 
-    <header class="fogo-nav">
-
-        <div class="fogo-nav-inner">
-
-            <a href="home.html" class="fogo-logo">
-                <span class="fogo-logo-icon">🔥</span>
-                FogoSM
-            </a>
-
-            <nav class="fogo-nav-links">
-
-                <a href="#discover">
-                    Descubrir
-                </a>
-
-                <a href="#community">
-                    Comunidad
-                </a>
-
-            </nav>
-
-            <div class="fogo-nav-actions">
-
-                <a href="login.html" class="fogo-login">
-                    Iniciar sesión
-                </a>
-
-                <a href="register.html" class="fogo-register">
-                    Crear cuenta
-                </a>
-
-            </div>
-
-        </div>
-
+        <nav class="welcome-nav">
+            <a href="login.html" class="welcome-login">Iniciar sesión</a>
+            <a href="register.html" class="welcome-register">Crear cuenta</a>
+        </nav>
     </header>
 
+    <main class="welcome-main">
+        <div class="welcome-glow welcome-glow-one"></div>
+        <div class="welcome-glow welcome-glow-two"></div>
 
-    <!-- =====================================================
-         HERO
-         ===================================================== -->
-
-    <main>
-
-        <section class="fogo-hero">
-
-            <div class="fogo-hero-content">
-
-                <div class="fogo-eyebrow">
-                    <span>🔥</span>
-                    La nueva generación social
-                </div>
-
-                <h1>
-                    Comparte lo que
-                    <span>te apasiona.</span>
-                </h1>
-
-                <p>
-                    FogoSM es un espacio para descubrir contenido,
-                    compartir tus ideas y conectar con personas que
-                    tienen tus mismos intereses.
-                </p>
-
-                <div class="fogo-hero-actions">
-
-                    <a
-                        href="register.html"
-                        class="fogo-button fogo-button-primary"
-                    >
-                        Crear cuenta
-                        <span>→</span>
-                    </a>
-
-                    <a
-                        href="#discover"
-                        class="fogo-button fogo-button-secondary"
-                    >
-                        Descubrir FogoSM
-                    </a>
-
-                </div>
-
-                <div class="fogo-hero-note">
-                    <span>✓</span>
-                    Una comunidad hecha para compartir
-                </div>
-
+        <section class="welcome-content">
+            <div class="welcome-badge">
+                <span class="welcome-dot"></span>
+                UNA NUEVA EXPERIENCIA SOCIAL
             </div>
 
-
-            <!-- =================================================
-                 SOCIAL PREVIEW
-                 ================================================= -->
-
-            <div class="fogo-preview-wrapper">
-
-                <div class="fogo-preview-glow"></div>
-
-                <div class="fogo-preview">
-
-                    <div class="fogo-preview-header">
-
-                        <div class="fogo-preview-brand">
-                            🔥 FogoSM
-                        </div>
-
-                        <div class="fogo-preview-icons">
-                            <span>⌕</span>
-                            <span>♡</span>
-
-                            <div class="fogo-preview-avatar">
-                                A
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                    <div class="fogo-preview-body">
-
-                        <aside class="fogo-preview-sidebar">
-
-                            <div class="preview-sidebar-active">
-                                <span>⌂</span>
-                                <small>Inicio</small>
-                            </div>
-
-                            <div>
-                                <span>✦</span>
-                                <small>Descubrir</small>
-                            </div>
-
-                            <div>
-                                <span>♧</span>
-                                <small>Comunidad</small>
-                            </div>
-
-                            <div>
-                                <span>♡</span>
-                                <small>Guardados</small>
-                            </div>
-
-                        </aside>
-
-
-                        <div class="fogo-preview-feed">
-
-                            <div class="preview-create">
-
-                                <div class="preview-user-avatar">
-                                    A
-                                </div>
-
-                                <span>
-                                    ¿Qué quieres compartir?
-                                </span>
-
-                            </div>
-
-
-                            <article class="preview-post">
-
-                                <div class="preview-post-header">
-
-                                    <div class="preview-post-avatar">
-                                        🔥
-                                    </div>
-
-                                    <div>
-                                        <strong>
-                                            FogoSM
-                                        </strong>
-
-                                        <small>
-                                            @fogo · ahora
-                                        </small>
-                                    </div>
-
-                                </div>
-
-                                <p>
-                                    Bienvenido a FogoSM. 🔥
-                                </p>
-
-                                <div class="preview-post-image">
-                                    <span>🔥</span>
-                                </div>
-
-                                <div class="preview-post-actions">
-                                    <span>♡ 128</span>
-                                    <span>💬 24</span>
-                                    <span>↗ Compartir</span>
-                                </div>
-
-                            </article>
-
-                        </div>
-
-
-                        <aside class="fogo-preview-trends">
-
-                            <h4>
-                                Tendencias
-                            </h4>
-
-                            <div>
-                                <small>Popular</small>
-                                <strong>#FogoSM</strong>
-                            </div>
-
-                            <div>
-                                <small>Gaming</small>
-                                <strong>#RocketLeague</strong>
-                            </div>
-
-                            <div>
-                                <small>Creatividad</small>
-                                <strong>#Arte</strong>
-                            </div>
-
-                        </aside>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-             DISCOVER
-             ===================================================== -->
-
-        <section
-            class="fogo-section"
-            id="discover"
-        >
-
-            <div class="fogo-section-heading">
-
-                <span>
-                    FogoSM
-                </span>
-
-                <h2>
-                    Un lugar para descubrir.
-                </h2>
-
-                <p>
-                    Encuentra contenido y personas que hagan
-                    que quieras volver.
-                </p>
-
-            </div>
-
-
-            <div class="fogo-feature-grid">
-
-                <article class="fogo-feature">
-
-                    <div class="fogo-feature-icon">
-                        ✦
-                    </div>
-
-                    <h3>
-                        Descubre
-                    </h3>
-
-                    <p>
-                        Encuentra contenido nuevo y descubre
-                        comunidades relacionadas con tus intereses.
-                    </p>
-
-                </article>
-
-
-                <article class="fogo-feature">
-
-                    <div class="fogo-feature-icon">
-                        ♧
-                    </div>
-
-                    <h3>
-                        Conecta
-                    </h3>
-
-                    <p>
-                        Conoce personas, sigue cuentas y forma
-                        parte de comunidades.
-                    </p>
-
-                </article>
-
-
-                <article class="fogo-feature">
-
-                    <div class="fogo-feature-icon">
-                        ◉
-                    </div>
-
-                    <h3>
-                        Comparte
-                    </h3>
-
-                    <p>
-                        Publica tus ideas, imágenes y momentos
-                        para que otros puedan descubrirlos.
-                    </p>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-             COMMUNITY
-             ===================================================== -->
-
-        <section
-            class="fogo-community"
-            id="community"
-        >
-
-            <div class="fogo-community-content">
-
-                <span>
-                    COMUNIDAD
-                </span>
-
-                <h2>
-                    Tu contenido.
-                    Tu gente.
-                    <strong>Tu FogoSM.</strong>
-                </h2>
-
-                <p>
-                    FogoSM está pensado para que puedas encontrar
-                    personas con tus mismos intereses y crear tu
-                    propio espacio dentro de la comunidad.
-                </p>
-
-                <a
-                    href="register.html"
-                    class="fogo-button fogo-button-primary"
-                >
-                    Unirme a FogoSM
-                    <span>→</span>
-                </a>
-
-            </div>
-
-
-            <div class="fogo-community-visual">
-
-                <div class="community-main-card">
-
-                    <div class="community-card-top">
-
-                        <div class="community-avatar">
-                            🔥
-                        </div>
-
-                        <div>
-                            <strong>
-                                FogoSM
-                            </strong>
-
-                            <small>
-                                Comunidad
-                            </small>
-                        </div>
-
-                    </div>
-
-                    <p>
-                        Comparte lo que te apasiona. 🔥
-                    </p>
-
-                    <div class="community-stats">
-                        <span>♡ 342</span>
-                        <span>💬 48</span>
-                        <span>↗ 19</span>
-                    </div>
-
-                </div>
-
-
-                <div class="community-tag tag-one">
-                    🎮 Gaming
-                </div>
-
-                <div class="community-tag tag-two">
-                    🎨 Creatividad
-                </div>
-
-                <div class="community-tag tag-three">
-                    🌍 Comunidad
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-             FINAL CTA
-             ===================================================== -->
-
-        <section class="fogo-final">
-
-            <div class="fogo-final-icon">
-                🔥
-            </div>
-
-            <h2>
-                Empieza tu historia en FogoSM.
-            </h2>
-
-            <p>
-                Crea tu cuenta y descubre una nueva forma
-                de compartir y conectar.
+            <h1>
+                Tu mundo.<br>
+                Tu espacio.<br>
+                <span class="welcome-gradient">Tu FogoSM.</span>
+            </h1>
+
+            <p class="welcome-description">
+                Un espacio digital para expresarte, descubrir
+                contenido y conectar con nuevas ideas.
+                Bienvenido a FogoSM.
             </p>
 
-            <a
-                href="register.html"
-                class="fogo-button fogo-button-light"
-            >
-                Crear cuenta
-                <span>→</span>
-            </a>
+            <div class="welcome-actions">
+                <a href="register.html" class="welcome-primary">
+                    Crear mi cuenta <span>↗</span>
+                </a>
 
+                <a href="login.html" class="welcome-secondary">
+                    Ya tengo una cuenta
+                </a>
+            </div>
+
+            <p class="welcome-note">
+                <span>✦</span> FogoSM está en desarrollo.
+                Esta es su versión beta.
+            </p>
         </section>
 
+        <div class="welcome-decoration" aria-hidden="true">
+            <div class="welcome-orbit welcome-orbit-one"></div>
+            <div class="welcome-orbit welcome-orbit-two"></div>
+
+            <div class="welcome-center">
+                <span class="welcome-center-letter">F</span>
+                <span class="welcome-center-name">FOGOSM</span>
+                <span class="welcome-center-caption">YOUR SPACE</span>
+            </div>
+
+            <span class="welcome-spark welcome-spark-one">✦</span>
+            <span class="welcome-spark welcome-spark-two">✧</span>
+            <span class="welcome-spark welcome-spark-three">✳</span>
+        </div>
     </main>
 
-
-    <!-- =====================================================
-         FOOTER
-         ===================================================== -->
-
-    <footer class="fogo-footer">
-
-        <div class="fogo-footer-inner">
-
-            <div class="fogo-footer-brand">
-                🔥 FogoSM
-            </div>
-
-            <p>
-                Comparte. Descubre. Conecta.
-            </p>
-
-            <div class="fogo-footer-links">
-
-                <a href="login.html">
-                    Iniciar sesión
-                </a>
-
-                <a href="register.html">
-                    Crear cuenta
-                </a>
-
-            </div>
-
-        </div>
-
+    <footer class="welcome-footer">
+        <span>© 2026 FogoSM</span>
+        <span>CREATED FOR WHAT COMES NEXT.</span>
+        <span class="welcome-version">BETA v0.1</span>
     </footer>
-<div class="beta-notice">
-    FogoSM BETA v0.1 🚧
-</div>
-</body>
 
+</body>
 </html>
+

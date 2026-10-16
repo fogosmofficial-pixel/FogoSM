@@ -266,6 +266,7 @@
     let searchTerm = "";
     let selectedTopic = "";
     const likedPosts = new Set();
+const postLikeCounts = new Map();
     const savedPosts = new Set();
 
     function notify(message) {
@@ -380,33 +381,36 @@
       return posts;
     }
 
-    function postMarkup(post) {
-      const username = post.username || "Usuario";
-      const isLiked = likedPosts.has(post.id);
-      const isSaved = savedPosts.has(post.id);
-      const isMine = currentUser && post.user_id === currentUser.id;
+function postMarkup(post) {
+  const username = post.username || "Usuario";
+  const isLiked = likedPosts.has(post.id);
+  const isSaved = savedPosts.has(post.id);
+  const likeCount = postLikeCounts.get(post.id) || 0;
+  const isMine = currentUser && post.user_id === currentUser.id;
 
-      return `
-        <article class="post-card" data-post-id="${escapeHTML(post.id)}">
-          <div class="post-header">
-            <div class="avatar post-avatar">${escapeHTML(getInitial(username))}</div>
-            <div class="post-author">
-              <strong>${escapeHTML(username)}</strong>
-              <span>${escapeHTML(timeAgo(post.created_at))}</span>
-            </div>
-            ${isMine ? '<span class="you-badge">TU PUBLICACIÓN</span>' : ""}
-            <button class="post-more" data-action="more" data-id="${escapeHTML(post.id)}" aria-label="Más opciones">···</button>
-          </div>
-          <div class="post-body">${escapeHTML(post.content).replace(/\n/g, "<br>")}</div>
-          <div class="post-tags"><span>#FogoSM</span><span>#ComparteTuMundo</span></div>
-          <div class="post-actions">
-            <button class="post-action ${isLiked ? "liked" : ""}" data-action="like" data-id="${escapeHTML(post.id)}">♡ <span>${isLiked ? "Te gusta" : "Me gusta"}</span></button>
-            <button class="post-action" data-action="comment" data-id="${escapeHTML(post.id)}">◯ <span>Comentar</span></button>
-            <button class="post-action ${isSaved ? "saved" : ""}" data-action="save" data-id="${escapeHTML(post.id)}">♧ <span>${isSaved ? "Guardado" : "Guardar"}</span></button>
-          </div>
-        </article>
-      `;
-    }
+  return `
+    <article class="post-card" data-post-id="${escapeHTML(post.id)}">
+      <div class="post-header">
+        <div class="avatar post-avatar">${escapeHTML(getInitial(username))}</div>
+        <div class="post-author">
+          <strong>${escapeHTML(username)}</strong>
+          <span>${escapeHTML(timeAgo(post.created_at))}</span>
+        </div>
+        ${isMine ? '<span class="you-badge">TU PUBLICACIÓN</span>' : ""}
+        <button class="post-more" data-action="more" data-id="${escapeHTML(post.id)}" aria-label="Más opciones">···</button>
+      </div>
+
+      <div class="post-body">${escapeHTML(post.content).replace(/\n/g, "<br>")}</div>
+      <div class="post-tags"><span>#FogoSM</span><span>#ComparteTuMundo</span></div>
+
+      <div class="post-actions">
+        <button class="post-action ${isLiked ? "liked" : ""}" data-action="like" data-id="${escapeHTML(post.id)}">♡ <span>${isLiked ? "Te gusta" : "Me gusta"}</span> · ${likeCount}</button>
+        <button class="post-action" data-action="comment" data-id="${escapeHTML(post.id)}">◯ <span>Comentar</span></button>
+        <button class="post-action ${isSaved ? "saved" : ""}" data-action="save" data-id="${escapeHTML(post.id)}">♧ <span>${isSaved ? "Guardado" : "Guardar"}</span></button>
+      </div>
+    </article>
+  `;
+}
 
     function renderPosts() {
       if (activeView === "shorts") return;
@@ -445,29 +449,54 @@
       }
     }
 
-    async function loadPosts() {
-      feedStatus.classList.remove("hidden");
-      feedStatus.textContent = "Cargando publicaciones...";
-      emptyState.classList.add("hidden");
+   
+async function loadPosts() {
+  feedStatus.classList.remove("hidden");
+  feedStatus.textContent = "Cargando publicaciones...";
+  emptyState.classList.add("hidden");
 
-      try {
-        const { data, error } = await supabaseClient
-          .from("posts")
-          .select("id, user_id, username, content, created_at")
-          .order("created_at", { ascending: false })
-          .limit(50);
+  try {
+    const { data, error } = await supabaseClient
+      .from("posts")
+      .select("id, user_id, username, content, created_at")
+      .order("created_at", { ascending: false })
+      .limit(50);
 
-        if (error) throw error;
+    if (error) throw error;
 
-        allPosts = data || [];
-        renderPosts();
-      } catch (error) {
-        console.error("Error loading posts:", error);
-        feedStatus.classList.remove("hidden");
-        feedStatus.textContent = "No se pudieron cargar las publicaciones. Comprueba tu conexión y las políticas de Supabase.";
-        postList.innerHTML = "";
+    allPosts = data || [];
+
+    // Reiniciar los likes antes de volver a cargarlos.
+    likedPosts.clear();
+    postLikeCounts.clear();
+
+    if (currentUser && allPosts.length > 0) {
+      const { data: likes, error: likesError } = await supabaseClient
+        .from("post_likes")
+        .select("post_id, user_id")
+        .in("post_id", allPosts.map(post => post.id));
+
+      if (likesError) throw likesError;
+
+      for (const like of likes || []) {
+        const count = postLikeCounts.get(like.post_id) || 0;
+        postLikeCounts.set(like.post_id, count + 1);
+
+        if (like.user_id === currentUser.id) {
+          likedPosts.add(like.post_id);
+        }
       }
     }
+
+    renderPosts();
+  } catch (error) {
+    console.error("Error loading posts:", error);
+    feedStatus.classList.remove("hidden");
+    feedStatus.textContent =
+      "No se pudieron cargar las publicaciones o sus Me gusta. Comprueba tu conexión y las políticas de Supabase.";
+    postList.innerHTML = "";
+  }
+}
 
     postContent.addEventListener("input", () => {
       $("#charCount").textContent = `${postContent.value.length}/1000`;
@@ -535,11 +564,55 @@
 
       const { action, id } = actionButton.dataset;
 
-      if (action === "like") {
-        if (likedPosts.has(id)) likedPosts.delete(id);
-        else likedPosts.add(id);
-        renderPosts();
-      }
+if (action === "like") {
+  if (!currentUser) {
+    notify("Inicia sesión para dar Me gusta.");
+    return;
+  }
+
+  if (actionButton.disabled) return;
+  actionButton.disabled = true;
+
+  try {
+    if (likedPosts.has(id)) {
+      const { error } = await supabaseClient
+        .from("post_likes")
+        .delete()
+        .eq("post_id", id)
+        .eq("user_id", currentUser.id);
+
+      if (error) throw error;
+
+      likedPosts.delete(id);
+      postLikeCounts.set(
+        id,
+        Math.max(0, (postLikeCounts.get(id) || 0) - 1)
+      );
+    } else {
+      const { error } = await supabaseClient
+        .from("post_likes")
+        .insert({
+          post_id: id,
+          user_id: currentUser.id
+        });
+
+      if (error) throw error;
+
+      likedPosts.add(id);
+      postLikeCounts.set(
+        id,
+        (postLikeCounts.get(id) || 0) + 1
+      );
+    }
+
+    renderPosts();
+  } catch (error) {
+    console.error("Error al guardar el like:", error);
+    notify("No se pudo guardar el Me gusta. Inténtalo de nuevo.");
+  } finally {
+    actionButton.disabled = false;
+  }
+}
 
       if (action === "save") {
         if (savedPosts.has(id)) {
@@ -645,5 +718,9 @@
 <div class="beta-notice">
     FogoSM BETA v0.1 🚧
 </div>
+</body>
+</html>
+
+  <script src="video-discovery.js"></script>
 </body>
 </html>
